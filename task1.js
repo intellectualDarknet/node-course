@@ -1,6 +1,4 @@
 const http = require('http')
-const csv=require('csvtojson')
-const fs = require('fs')
 
 const server = http.createServer((req, res) => {
   res.end('<h1>Hello Ken</h1>')
@@ -8,5 +6,9 @@ const server = http.createServer((req, res) => {
 
 server.listen(3500, () => {
 
+
+  process.stdin.on('data', (data) => {
+    process.stdout.write(data.toString().split('').reverse().join('') + '\n');
+  })
 
 })
