@@ -1,6 +1,8 @@
-const http = require('http')
-const csv = require('csvtojson')
-const fs = require('fs')
+import http from 'http'
+import csv from 'csvtojson'
+import fs from 'fs'
+import * as url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const server = http.createServer((req, res) => {
   res.end('<h1>Hello Ken</h1>')
