@@ -5,10 +5,7 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(3500, () => {
-
-
   process.stdin.on('data', (data) => {
-    process.stdout.write(data.toString().split('').reverse().join('') + '\n');
+    process.stdout.write(data.toString().split('').reverse().join('') + '\n')
   })
-
 })
