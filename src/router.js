@@ -1,12 +1,13 @@
 import Router from 'express'
-import PostController from './postcontroller.js'
+import UserController from './usercontroller.js'
 
 const router = new Router()
 
-router.post('/posts', PostController.create)
-router.get('/posts', PostController.getAll)
-router.get('/posts/:id', PostController.getOne)
-router.put('/posts', PostController.update)
-router.delete('/posts/:id', PostController.delete)
+router.post('/users', UserController.create)
+router.get('/users', UserController.getAll)
+router.get('/auto-suggested-users', UserController.getAutoSuggestedUsers)
+router.get('/users/:id', UserController.getOne)
+router.put('/users', UserController.update)
+router.delete('/users/:id', UserController.delete)
 
 export default router
