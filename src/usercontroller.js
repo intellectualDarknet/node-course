@@ -1,13 +1,21 @@
 import UserService from './user-service.js'
-import User from './user.js'
+import userValidation from './validations/user.js'
+// import User from './user.js'
 
 class UserController {
-  async create (req, res) {
-    try {
-      const user = await UserService.create(req.body)
-      res.json(user)
-    } catch (e) {
-      res.status(500).json(e.message)
+  async create (req, res, next) {
+    const { error } = userValidation(req.body)
+
+    if (error) {
+      console.log('from error', error)
+      res.status(400).json(error.message)
+    } else {
+      try {
+        const user = await UserService.create(req.body)
+        res.json(user)
+      } catch (e) {
+        res.status(500).json(e)
+      }
     }
   }
 
@@ -35,7 +43,7 @@ class UserController {
       if (!id) {
         res.status(400).json({ message: 'Id не указан' })
       }
-      const user = await User.findById(id)
+      const user = await UserService.getOne(id)
       return res.json(user)
     } catch (e) {
       res.status(500).json(e)
@@ -43,15 +51,20 @@ class UserController {
   }
 
   async update (req, res) {
-    try {
-      const user = req.body
-      if (!user._id) {
-        res.status(400).json({ message: 'Id не указан' })
+    const { _id, ...rest } = req.body
+    const { error } = userValidation(rest)
+
+    if (error) {
+      console.log('from error', error)
+      res.status(400).json(error.message)
+    } else {
+      try {
+        const user = req.body
+        const updatePost = await UserService.update(user)
+        return res.json(updatePost)
+      } catch (e) {
+        res.status(500).json(e)
       }
-      const updatePost = await User.findByIdAndUpdate(user._id, user, { new: true })
-      return res.json(updatePost)
-    } catch (e) {
-      res.status(500).json(e)
     }
   }
 
@@ -61,7 +74,7 @@ class UserController {
       if (!id) {
         res.status(400).json({ message: 'ID не указан' })
       }
-      const user = await User.findByIdAndDelete(id)
+      const user = await UserService.delete(id)
       return res.json(user)
     } catch (e) {
       res.status(500).json(e)
