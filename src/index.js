@@ -1,10 +1,7 @@
 import express from 'express'
-import mongoose from 'mongoose'
-import router from './router.js'
+import router from './routes/user.routes.js'
 
-const port = 5000
-const DB_URL = 'mongodb+srv://ladyblaumeux24:4057321qwe@cluster0.od2acyz.mongodb.net/?retryWrites=true&w=majority'
-
+const port = 8080
 const app = express()
 
 app.use(express.json())
@@ -12,7 +9,6 @@ app.use('/api', router)
 
 async function startApp () {
   try {
-    await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
     app.listen(port, () => {
       console.log('server start!' + port)
     })
