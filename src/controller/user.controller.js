@@ -1,7 +1,7 @@
 import db from '../db.js'
 
 class UserController {
-  async createUser (req, res, next) {
+  async createUser (req, res) {
     const { name, surname } = req.body
     const newPerson = await db.query('INSERT INTO PERSON (name, surname) values ($1,$2) RETURNING *', [name, surname])
     res.json(newPerson.rows[0])
