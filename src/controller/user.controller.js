@@ -1,50 +1,34 @@
-const User = require('../sequelize/models/user.cjs')
+const UserService = require('../services/user.service.js')
 
 class UserController {
   async createUser (req, res) {
-    const user = req.body
-    const newPerson = await User.create({
-      id: user.id,
-      login: user.login,
-      password: user.password,
-      age: user.age,
-      isDeleted: user.isDeleted
-    })
-    res.json(newPerson.dataValues)
+    const user = await UserService.create(req.body)
+    res.status(200).json(user)
+  }
+
+  async getAutoSuggestedUsers (req, res) {
+    console.log('reqQuery', req.query)
+    const users = await UserService.getAutoSuggestedUsers(req.query)
+    res.status(200).json(users)
   }
 
   async getUsers (req, res) {
-    const users = await User.findAll()
+    const users = await UserService.getUsers()
     res.status(200).json(users)
   }
 
   async getOneUser (req, res) {
-    const id = req.params.id
-    const user = await User.findByPk(id)
+    const user = await UserService.getOneUser(req.params.id)
     res.status(200).json(user)
   }
 
   async updateUser (req, res) {
-    const {
-      id,
-      login,
-      password,
-      age,
-      isDeleted
-    } = req.body
-    const user = await User.findByPk(id)
-
-    await user.set({ login, password, age, isDeleted })
-    await user.save()
-    res.status(200).json(user)
+    const person = await UserService.update(req.body)
+    res.status(200).json(person)
   }
 
   async deleteUser (req, res) {
-    const id = req.params.id
-    const user = await User.findByPk(id)
-    console.log('user', user)
-    await user.destroy()
-    console.log('user', user)
+    const user = await UserService.delete(req.params.id)
     res.status(200).json(user)
   }
 }

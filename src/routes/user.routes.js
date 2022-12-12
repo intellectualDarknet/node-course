@@ -5,6 +5,7 @@ var router = new Router()
 
 router.post('/users', UserController.createUser)
 router.get('/users', UserController.getUsers)
+router.get('/auto-suggested-users', UserController.getAutoSuggestedUsers)
 router.get('/users/:id', UserController.getOneUser)
 router.put('/users', UserController.updateUser)
 router.delete('/users/:id', UserController.deleteUser)

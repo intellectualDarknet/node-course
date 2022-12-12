@@ -1,4 +1,5 @@
 var User = require('../sequelize/models/user.cjs')
+const { Op } = require('sequelize')
 
 class UserService {
   async create (post) {
@@ -6,41 +7,56 @@ class UserService {
     return createdUser
   }
 
-  async getAll () {
-    const users = await User.find()
-    return users
-  }
-
   async getAutoSuggestedUsers ({ loginSubstring = '', limit = 10 }) {
-    const users = await User.find({ login: { $regex: loginSubstring, $options: 'i' } }).sort({ login: 1 }).limit(limit)
+    console.log('query', loginSubstring, limit)
+    const users = await User.findAll({
+      where: {
+        login: {
+          [Op.substring]: loginSubstring
+        }
+      },
+      limit
+    })
     return users
   }
 
-  async getOne (id) {
+  async getUsers () {
+    const users = await User.findAll()
+    return users
+  }
+
+  async getOneUser (id) {
     if (!id) {
       throw new Error('Не указан ID')
     }
-    const user = await User.findOne({
-      where: {
-        id
-      }
-    })
+    const user = await User.findByPk(id)
     return user
   }
 
-  async update (user) {
-    if (!user._id) {
+  async update (body) {
+    if (!body.id) {
       throw new Error('Не указан ID')
     }
-    const updateUser = await User.findByIdAndUpdate(user._id, user, { new: true })
-    return updateUser
+    const {
+      id,
+      login,
+      password,
+      age,
+      isDeleted
+    } = body
+    const user = await User.findByPk(id)
+    await user.set({ login, password, age, isDeleted })
+    await user.save()
+    return user
   }
 
   async delete (id) {
     if (!id) {
       throw new Error('Не указан ID')
     }
-    const user = await User.findByIdAndDelete(id)
+    const user = await User.findByPk(id)
+    await user.destroy()
+
     return user
   }
 }
