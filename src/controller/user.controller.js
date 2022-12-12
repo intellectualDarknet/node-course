@@ -1,13 +1,22 @@
 const UserService = require('../services/user.service.js')
+const userValidation = require('../validation/validation.js')
 
 class UserController {
   async createUser (req, res) {
-    const user = await UserService.create(req.body)
-    res.status(200).json(user)
+    const { error } = userValidation(req.body)
+    if (error) {
+      res.status(400).json(error.message)
+    } else {
+      try {
+        const user = await UserService.create(req.body)
+        res.status(200).json(user)
+      } catch (e) {
+        res.status(500).json(e)
+      }
+    }
   }
 
   async getAutoSuggestedUsers (req, res) {
-    console.log('reqQuery', req.query)
     const users = await UserService.getAutoSuggestedUsers(req.query)
     res.status(200).json(users)
   }
@@ -18,18 +27,45 @@ class UserController {
   }
 
   async getOneUser (req, res) {
-    const user = await UserService.getOneUser(req.params.id)
-    res.status(200).json(user)
+    try {
+      const user = await UserService.getOneUser(req.params.id)
+      if (!user) {
+        res.status(404)
+      }
+      res.status(200).json(user)
+    } catch (e) {
+      res.status(500).json(e)
+    }
   }
 
   async updateUser (req, res) {
-    const person = await UserService.update(req.body)
-    res.status(200).json(person)
+    const { error } = userValidation(req.body)
+    if (error) {
+      console.log('from error', error)
+      res.status(400).json(error.message)
+    } else {
+      try {
+        const person = await UserService.update(req.params.id, req.body)
+        if (!person) {
+          res.status(404)
+        }
+        res.status(200).json(person)
+      } catch (e) {
+        res.status(500).json(e)
+      }
+    }
   }
 
   async deleteUser (req, res) {
-    const user = await UserService.delete(req.params.id)
-    res.status(200).json(user)
+    try {
+      const user = await UserService.delete(req.params.id)
+      if (!user) {
+        res.status(404)
+      }
+      res.status(200).json(user)
+    } catch (e) {
+      res.status(500).json(e)
+    }
   }
 }
 

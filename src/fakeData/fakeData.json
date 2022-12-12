@@ -1,34 +1,29 @@
 [
   {
-    "id": "101",
     "login": "blaumeux@gmail.com",
     "password": "qwert56",
     "age": "12",
     "isDeleted": true
   },
   {
-    "id": "102",
     "login": "billy@gmail.com",
     "password": "qweewqawd",
     "age": "13",
     "isDeleted": true
   },
   {
-    "id": "103",
     "login": "servey@gmail.com",
     "password": "qwert56dd",
     "age": "18",
     "isDeleted": true
   },
   {
-    "id": "104",
     "login": "epam@gmail.com",
     "password": "glitterdb",
     "age": "5",
     "isDeleted": true
   },
   {
-    "id": "105",
     "login": "lucan@gmail.com",
     "password": "asefff12bd",
     "age": "23",

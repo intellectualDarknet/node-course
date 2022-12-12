@@ -10,16 +10,14 @@ class User extends Model {
 
 User.init({
   id: {
-    type: DataTypes.STRING,
-    primaryKey: true
-    // autoIncrement: true
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
   login: DataTypes.STRING,
   password: DataTypes.STRING,
   age: DataTypes.NUMBER,
-  isDeleted: DataTypes.BOOLEAN,
-  updated_at: DataTypes.STRING,
-  created_at: DataTypes.STRING
+  isDeleted: DataTypes.BOOLEAN
 }, {
   sequelize,
   modelName: 'User',

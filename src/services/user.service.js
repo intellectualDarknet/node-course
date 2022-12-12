@@ -8,7 +8,6 @@ class UserService {
   }
 
   async getAutoSuggestedUsers ({ loginSubstring = '', limit = 10 }) {
-    console.log('query', loginSubstring, limit)
     const users = await User.findAll({
       where: {
         login: {
@@ -26,19 +25,12 @@ class UserService {
   }
 
   async getOneUser (id) {
-    if (!id) {
-      throw new Error('Не указан ID')
-    }
     const user = await User.findByPk(id)
     return user
   }
 
-  async update (body) {
-    if (!body.id) {
-      throw new Error('Не указан ID')
-    }
+  async update (id, body) {
     const {
-      id,
       login,
       password,
       age,
@@ -51,12 +43,8 @@ class UserService {
   }
 
   async delete (id) {
-    if (!id) {
-      throw new Error('Не указан ID')
-    }
     const user = await User.findByPk(id)
     await user.destroy()
-
     return user
   }
 }

@@ -5,7 +5,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        type: Sequelize.STRING
+        type: Sequelize.NUMBER
       },
       login: {
         type: Sequelize.STRING
@@ -18,14 +18,6 @@ module.exports = {
       },
       isDeleted: {
         type: Sequelize.BOOLEAN
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     })
   },
