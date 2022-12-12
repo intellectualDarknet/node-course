@@ -1,12 +1,12 @@
-import Router from 'express'
-import UserController from '../controller/user.controller.js'
+var Router = require('express')
+var UserController = require('../controller/user.controller.js')
 
-const router = new Router()
+var router = new Router()
 
-router.post('/user', UserController.createUser)
-router.get('/user', UserController.getUsers)
-router.get('/user/:id', UserController.getOneUser)
-router.put('/user', UserController.updateUser)
-router.delete('/user/:id', UserController.deleteUser)
+router.post('/users', UserController.createUser)
+router.get('/users', UserController.getUsers)
+router.get('/users/:id', UserController.getOneUser)
+router.put('/users', UserController.updateUser)
+router.delete('/users/:id', UserController.deleteUser)
 
-export default router
+module.exports = router

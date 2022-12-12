@@ -1,6 +1,6 @@
-import UserService from './user-service.js'
-import userValidation from './validations/user.js'
-// import User from './user.js'
+const UserService = require('./user-service.js')
+const userValidation = require('./validations/user.js')
+// const User = require ('./user.js')
 
 class UserController {
   async create (req, res, next) {
@@ -82,4 +82,4 @@ class UserController {
   }
 }
 
-export default new UserController()
+module.exports = new UserController()

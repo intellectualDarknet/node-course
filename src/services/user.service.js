@@ -1,4 +1,4 @@
-import User from './user.js'
+var User = require('../sequelize/models/user.cjs')
 
 class UserService {
   async create (post) {
@@ -20,7 +20,11 @@ class UserService {
     if (!id) {
       throw new Error('Не указан ID')
     }
-    const user = await User.findById(id)
+    const user = await User.findOne({
+      where: {
+        id
+      }
+    })
     return user
   }
 
@@ -41,4 +45,4 @@ class UserService {
   }
 }
 
-export default new UserService()
+module.exports = new UserService()

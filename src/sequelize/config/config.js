@@ -1,11 +1,10 @@
-export default {
+module.exports = {
   development: {
+    database: 'node_postgres',
     username: 'postgres',
     password: '54321',
-    database: 'node_postgres',
     host: 'localhost',
     dialect: 'postgres'
-
   },
   test: {
     username: 'postgres',

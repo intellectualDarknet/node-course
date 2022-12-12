@@ -1,35 +1,52 @@
-import db from '../db.js'
+const User = require('../sequelize/models/user.cjs')
 
 class UserController {
   async createUser (req, res) {
-    const { name, surname } = req.body
-    const newPerson = await db.query('INSERT INTO PERSON (name, surname) values ($1,$2) RETURNING *', [name, surname])
-    res.json(newPerson.rows[0])
+    const user = req.body
+    const newPerson = await User.create({
+      id: user.id,
+      login: user.login,
+      password: user.password,
+      age: user.age,
+      isDeleted: user.isDeleted
+    })
+    res.json(newPerson.dataValues)
   }
 
   async getUsers (req, res) {
-    const users = await db.query('SELECT * FROM person')
-    res.json(users.rows)
+    const users = await User.findAll()
+    res.status(200).json(users)
   }
 
   async getOneUser (req, res) {
     const id = req.params.id
-    const user = await db.query('SELECT * FROM person where id = $1', [id])
-    res.json(user.rows[0])
-    console.log(user.rows[0])
+    const user = await User.findByPk(id)
+    res.status(200).json(user)
   }
 
   async updateUser (req, res) {
-    const { id, name, surname } = req.body
-    const user = await db.query('UPDATE person set name = $1, surname = $2 where id = $3 RETURNING *', [name, surname, id])
-    res.json(user.rows[0])
+    const {
+      id,
+      login,
+      password,
+      age,
+      isDeleted
+    } = req.body
+    const user = await User.findByPk(id)
+
+    await user.set({ login, password, age, isDeleted })
+    await user.save()
+    res.status(200).json(user)
   }
 
   async deleteUser (req, res) {
     const id = req.params.id
-    const user = await db.query('DELETE FROM person where id = $1', [id])
-    res.json(user.rows[0])
+    const user = await User.findByPk(id)
+    console.log('user', user)
+    await user.destroy()
+    console.log('user', user)
+    res.status(200).json(user)
   }
 }
 
-export default new UserController()
+module.exports = new UserController()
