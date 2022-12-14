@@ -1,4 +1,4 @@
-var User = require('../sequelize/models/user.cjs')
+const { User } = require('../sequelize/models/common.cjs')
 const { Op } = require('sequelize')
 
 class UserService {

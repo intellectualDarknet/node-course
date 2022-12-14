@@ -1,6 +1,8 @@
+
 module.exports = {
   development: {
-    database: 'node_postgres',
+    database: 'mydb',
+    port: 5432,
     username: 'postgres',
     password: '54321',
     host: 'localhost',
@@ -8,15 +10,16 @@ module.exports = {
   },
   test: {
     username: 'postgres',
+    port: 5432,
     password: '54321',
-    database: 'node_postgres',
+    database: 'mydb',
     host: 'localhost',
     dialect: 'postgres'
   },
   production: {
-    url: process.env.NODE_ENV,
     password: '54321',
-    database: 'node_postgres',
+    database: 'mydb',
+    port: 5432,
     host: 'localhost',
     dialect: 'postgres',
     dialectOptions: {
