@@ -1,5 +1,5 @@
 const UserService = require('../services/user.service.js')
-const GroupService = require('../services/group.service.js')
+// const GroupService = require('../services/group.service.js')
 const userValidation = require('../validation/validation.js')
 
 class UserController {
@@ -10,8 +10,10 @@ class UserController {
     } else {
       try {
         const user = await UserService.create(req.body)
-        const group = await GroupService.create(req.body.login, user.id)
-        res.status(200).json({ user, group })
+        // console.log('user id', user.id)
+        // const group = await GroupService.create(req.body.login, user.id)
+        // res.status(200).json({ user, group })
+        res.status(200).json(user)
       } catch (e) {
         res.status(500).json(e)
       }

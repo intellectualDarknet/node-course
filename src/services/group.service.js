@@ -1,8 +1,8 @@
-const { Group } = require('../sequelize/models/common.cjs')
+const { Group } = require('../sequelize/models')
 
 class GroupService {
   async create (login, userId) {
-    const createdUser = await Group.create({ login, userId })
+    const createdUser = await Group.create({ login, user_id: userId })
     return createdUser
   }
 
