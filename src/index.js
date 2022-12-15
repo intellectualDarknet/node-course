@@ -1,7 +1,7 @@
 const express = require('express')
-const router = require('./routes/user.routes.js')
+const UsersRouter = require('./routes/user.routes.js')
 const GroupRouter = require('./routes/group.router.js')
-const { User, Group } = require('./sequelize/models')
+const { User } = require('./sequelize/models')
 const db = require('./db.js')
 const fs = require('fs')
 const path = require('path')
@@ -10,8 +10,8 @@ const port = 8080
 const app = express()
 
 app.use(express.json())
-app.use('/postgres', router)
-app.use('/postgres', GroupRouter);
+app.use('/postgres/users/', UsersRouter)
+app.use('/postgres/groups/', GroupRouter);
 
 (async function startApp () {
   try {
