@@ -62,6 +62,18 @@ class GroupController {
       res.status(500).json(e)
     }
   }
+
+  async addUserToGroup (req, res) {
+    try {
+      const result = await GroupService.addUserToGroup(req.params.id, req.body)
+      if (!result) {
+        res.status(404)
+      }
+      res.status(200).json(result)
+    } catch (e) {
+      res.status(500).json(e)
+    }
+  }
 }
 
 module.exports = new GroupController()

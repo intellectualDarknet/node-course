@@ -1,9 +1,9 @@
-const { Group } = require('../sequelize/models')
+const { Group, User } = require('../sequelize/models')
 
 class GroupService {
-  async create (login, userId) {
-    const createdUser = await Group.create({ login, user_id: userId })
-    return createdUser
+  async create (group) {
+    const createdGroup = await Group.create(group)
+    return createdGroup
   }
 
   async getGroups () {
@@ -31,6 +31,19 @@ class GroupService {
     const user = await Group.findByPk(id)
     await user.destroy()
     return user
+  }
+
+  async addUserToGroup (groupId, userIds) {
+    const group = await Group.findByPk(groupId)
+    const users = await User.findAll({
+      where: {
+        id: userIds
+      }
+    })
+
+    await group.addUsers(users)
+    const groupUsers = await group.getUsers()
+    return groupUsers
   }
 }
 

@@ -9,8 +9,8 @@ Group.init({
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  user_id: DataTypes.STRING,
-  login: DataTypes.STRING
+  permissions: DataTypes.STRING,
+  name: DataTypes.STRING
 }, {
   sequelize: db,
   modelName: 'Group',
