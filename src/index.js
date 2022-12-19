@@ -5,13 +5,32 @@ const { User } = require('./sequelize/models')
 const db = require('./db.js')
 const fs = require('fs')
 const path = require('path')
+const logger = require('../src/logger/logger.js')
 
 const port = 8080
 const app = express()
 
 app.use(express.json())
+
+app.use((req, res, next) => {
+  console.log('route', req.app.route)
+  console.log('_router', req.app._router.stack[0])
+  console.log('myname', req)
+  next()
+})
+
+app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
-app.use('/postgres/groups/', GroupRouter);
+app.use((err, req, res, next) => {
+  if (res.myMethod) {
+    logger.inform(res.myMethod)
+    next(res.myMethod)
+  } else {
+    err.status = 500
+    logger.error(`Internal Server Error ${err.status}`)
+    next(err)
+  }
+});
 
 (async function startApp () {
   try {

@@ -19,7 +19,7 @@ class UserService {
     return users
   }
 
-  async getUsers () {
+  getUsers = async function () {
     const users = await User.findAll()
     return users
   }

@@ -5,8 +5,8 @@ const UsersRouter = new Router()
 
 UsersRouter.post('', UserController.createUser)
 UsersRouter.get('', UserController.getUsers)
-UsersRouter.get(':id', UserController.getOneUser)
-UsersRouter.put(':id', UserController.updateUser)
-UsersRouter.delete(':id', UserController.deleteUser)
+UsersRouter.get('/:id', UserController.getOneUser)
+UsersRouter.put('/:id', UserController.updateUser)
+UsersRouter.delete('/:id', UserController.deleteUser)
 
 module.exports = UsersRouter
