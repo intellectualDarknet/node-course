@@ -13,23 +13,18 @@ const app = express()
 app.use(express.json())
 
 app.use((req, res, next) => {
-  console.log('route', req.app.route)
-  console.log('_router', req.app._router.stack[0])
-  console.log('myname', req)
   next()
 })
 
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
 app.use((err, req, res, next) => {
-  if (res.myMethod) {
-    logger.inform(res.myMethod)
-    next(res.myMethod)
-  } else {
+  logger.inform(res.myMethod)
+  if (res.e) {
     err.status = 500
     logger.error(`Internal Server Error ${err.status}`)
-    next(err)
   }
+  next()
 });
 
 (async function startApp () {
