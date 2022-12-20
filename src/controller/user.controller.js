@@ -1,6 +1,8 @@
 const UserService = require('../services/user.service.js')
 const userValidation = require('../validation/validation.js')
 
+const handleErrorFn = require('../utils/handle.async')
+
 class UserController {
   async createUser (req, res, next) {
     res.myMethod = 'UserService createUser'
