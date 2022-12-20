@@ -5,7 +5,9 @@ const { User } = require('./sequelize/models')
 const db = require('./db.js')
 const fs = require('fs')
 const path = require('path')
-const logger = require('../src/logger/logger.js')
+const AppError = require('../src/error/error.js')
+
+const wrongPathHandler = require('./controller/error.controller.js')
 
 const port = 8080
 const app = express()
@@ -14,15 +16,12 @@ app.use(express.json())
 
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
-app.use((err, req, res, next) => {
-  console.log(res.e.stack)
-  logger.inform(res.myMethod)
-  if (res.e) {
-    err.status = 500
-    logger.error(`Internal Server Error ${err.status}`)
-  }
-  next()
-});
+
+app.all('*', (err, req, res, next) => {
+  res.e = err
+  next(res.e = new AppError('wrong path', 404))
+})
+app.use(wrongPathHandler);
 
 (async function startApp () {
   try {

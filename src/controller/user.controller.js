@@ -34,7 +34,6 @@ class UserController {
   async getUsers (req, res, next) {
     res.myMethod = 'UserService getUsers'
     try {
-      throw new Error('error')
       const users = await UserService.getUsers()
       res.status(200).json(users)
       next(res)
