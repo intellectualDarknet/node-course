@@ -17,9 +17,12 @@ app.use(express.json())
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
 
-app.all('*', (err, req, res, next) => {
-  res.e = err
-  next(res.e = new AppError('wrong path', 404))
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    message: ''
+  })
+  res.e = res.e = new AppError('wrong path', 404)
+  next(res)
 })
 app.use(wrongPathHandler);
 
