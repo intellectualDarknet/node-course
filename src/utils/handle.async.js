@@ -1,4 +1,4 @@
-const func = fn => {
+module.exports = fn => {
   return async (req, res, next) => {
     fn(req, res, next).catch(err => {
       res.e = err
@@ -6,4 +6,3 @@ const func = fn => {
     })
   }
 }
-module.exports = func

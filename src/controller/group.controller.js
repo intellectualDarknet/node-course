@@ -1,25 +1,22 @@
 const GroupService = require('../services/group.service')
 const groupValidation = require('../validation/group-validation.js')
 
+const tryCatchHandler = require('../utils/handle.async')
+
 class GroupController {
-  async createGroup (req, res, next) {
+  createGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController createGroup'
     const { error } = groupValidation(req.body)
     if (error) {
       res.status(400).json(error.message)
     } else {
-      try {
-        const group = await GroupService.create(req.body)
-        res.status(200).json(group)
-        next(res)
-      } catch (e) {
-        res.e = e
-        next(res)
-      }
+      const group = await GroupService.create(req.body)
+      res.status(200).json(group)
+      next(res)
     }
-  }
+  })
 
-  async getGroups (req, res, next) {
+  getGroups = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController getGroups'
     try {
       const groups = await GroupService.getGroups()
@@ -29,9 +26,9 @@ class GroupController {
       res.e = e
       next(res)
     }
-  }
+  })
 
-  async getOneGroup (req, res, next) {
+  getOneGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController getOneGroup'
     try {
       const group = await GroupService.getOneGroup(req.params.id)
@@ -44,9 +41,9 @@ class GroupController {
       res.e = e
       next(res)
     }
-  }
+  })
 
-  async updateGroup (req, res, next) {
+  updateGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController updateGroup'
     const { error } = groupValidation(req.body)
     if (error) {
@@ -65,9 +62,9 @@ class GroupController {
         next(res)
       }
     }
-  }
+  })
 
-  async deleteGroup (req, res, next) {
+  deleteGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController deleteGroup'
     try {
       const group = await GroupService.delete(req.params.id)
@@ -80,9 +77,9 @@ class GroupController {
       res.e = e
       next(res)
     }
-  }
+  })
 
-  async addUserToGroup (req, res, next) {
+  addUserToGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController addUserToGroup'
     try {
       const result = await GroupService.addUserToGroup(req.params.id, req.body)
@@ -95,7 +92,7 @@ class GroupController {
       res.e = e
       next(res)
     }
-  }
+  })
 }
 
 module.exports = new GroupController()
