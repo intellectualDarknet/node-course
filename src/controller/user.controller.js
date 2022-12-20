@@ -1,17 +1,10 @@
 const UserService = require('../services/user.service.js')
 const userValidation = require('../validation/validation.js')
 
-const func = fn => {
-  return (req, res, next) => {
-    fn(req, res, next).catch(err => {
-      res.e = err
-      next(res)
-    })
-  }
-}
+const catchAsync = require('../utils/catchAsync.js')
 
 class UserController {
-  createUser = func(async (req, res, next) => {
+  createUser = catchAsync(async (req, res, next) => {
     res.myMethod = 'UserService createUser'
     const { error } = userValidation(req.body)
     if (error) {
@@ -23,21 +16,21 @@ class UserController {
     }
   })
 
-  getAutoSuggestedUsers = func(async (req, res, next) => {
+  getAutoSuggestedUsers = catchAsync(async (req, res, next) => {
     res.myMethod = 'UserService getAutoSuggestedUsers'
     const users = await UserService.getAutoSuggestedUsers(req.query)
     res.status(200).json(users)
     next(res)
   })
 
-  getUsers = func(async (req, res, next) => {
+  getUsers = catchAsync(async (req, res, next) => {
     res.myMethod = 'UserService getUsers'
     const users = await UserService.getUsers()
     res.status(200).json(users)
     next(res)
   })
 
-  getOneUser = func(async (req, res, next) => {
+  getOneUser = catchAsync(async (req, res, next) => {
     res.myMethod = 'UserService getOneUser'
     const user = await UserService.getOneUser(req.params.id)
     if (!user) {
@@ -47,7 +40,7 @@ class UserController {
     next(res)
   })
 
-  updateUser = func(async (req, res, next) => {
+  updateUser = catchAsync(async (req, res, next) => {
     res.myMethod = 'UserService updateUser'
     const { error } = userValidation(req.body)
     if (error) {
@@ -62,7 +55,7 @@ class UserController {
     }
   })
 
-  deleteUser = func(async (req, res, next) => {
+  deleteUser = catchAsync(async (req, res, next) => {
     res.myMethod = 'UserService deleteUser'
     const user = await UserService.delete(req.params.id)
     if (!user) {

@@ -32,12 +32,16 @@ app.all('*', (req, res, next) => {
 // app.use((err, req, res, next) => {
 //   logger.inform(res.myMethod)
 //   if (res.e) {
-//     console.log(res.e.stack)
+//     console.log(res.e)
 //     err.status = 500
 //     logger.error(`Internal Server Error ${err.status} \t ${res.e.stack}`)
+//     res.status(200).json({
+//       status: err.status,
+//       message: res.e.message
+//     })
 //   }
 //   next()
-// });
+// })
 
 app.use(globalErrorHandler);
 
