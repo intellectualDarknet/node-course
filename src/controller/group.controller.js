@@ -18,29 +18,19 @@ class GroupController {
 
   getGroups = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController getGroups'
-    try {
-      const groups = await GroupService.getGroups()
-      res.status(200).json(groups)
-      next(res)
-    } catch (e) {
-      res.e = e
-      next(res)
-    }
+    const groups = await GroupService.getGroups()
+    res.status(200).json(groups)
+    next(res)
   })
 
   getOneGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController getOneGroup'
-    try {
-      const group = await GroupService.getOneGroup(req.params.id)
-      if (!group) {
-        res.status(404)
-      }
-      res.status(200).json(group)
-      next(res)
-    } catch (e) {
-      res.e = e
-      next(res)
+    const group = await GroupService.getOneGroup(req.params.id)
+    if (!group) {
+      res.status(404)
     }
+    res.status(200).json(group)
+    next(res)
   })
 
   updateGroup = tryCatchHandler(async (req, res, next) => {
@@ -50,48 +40,33 @@ class GroupController {
       console.log('from error', error)
       res.status(400).json(error.message)
     } else {
-      try {
-        const person = await GroupService.update(req.params.id, req.body)
-        if (!person) {
-          res.status(404)
-        }
-        res.status(200).json(person)
-        next(res)
-      } catch (e) {
-        res.e = e
-        next(res)
+      const person = await GroupService.update(req.params.id, req.body)
+      if (!person) {
+        res.status(404)
       }
+      res.status(200).json(person)
+      next(res)
     }
   })
 
   deleteGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController deleteGroup'
-    try {
-      const group = await GroupService.delete(req.params.id)
-      if (!group) {
-        res.status(404)
-      }
-      res.status(200).json(group)
-      next(res)
-    } catch (e) {
-      res.e = e
-      next(res)
+    const group = await GroupService.delete(req.params.id)
+    if (!group) {
+      res.status(404)
     }
+    res.status(200).json(group)
+    next(res)
   })
 
   addUserToGroup = tryCatchHandler(async (req, res, next) => {
     res.myMethod = 'GroupController addUserToGroup'
-    try {
-      const result = await GroupService.addUserToGroup(req.params.id, req.body)
-      if (!result) {
-        res.status(404)
-      }
-      res.status(200).json(result)
-      next(res)
-    } catch (e) {
-      res.e = e
-      next(res)
+    const result = await GroupService.addUserToGroup(req.params.id, req.body)
+    if (!result) {
+      res.status(404)
     }
+    res.status(200).json(result)
+    next(res)
   })
 }
 
