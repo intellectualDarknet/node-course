@@ -5,9 +5,9 @@ const { User } = require('./sequelize/models')
 const db = require('./db.js')
 const fs = require('fs')
 const path = require('path')
-const AppError = require('../src/error/error.js')
 
-const wrongPathHandler = require('./controller/error.controller.js')
+const wrongPathHandler = require('./controller/path.controller.js')
+const generalHandler = require('./controller/general.controller.js')
 
 const port = 8080
 const app = express()
@@ -17,15 +17,8 @@ app.use(express.json())
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
 
-app.all('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'fail',
-    message: `Can't find ${req.originalUrl} on this server!`
-  })
-  res.e = res.e = new AppError('wrong path', 404)
-  next(res)
-})
-app.use(wrongPathHandler);
+app.all('*', wrongPathHandler)
+app.use(generalHandler);
 
 (async function startApp () {
   try {
