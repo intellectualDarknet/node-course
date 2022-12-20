@@ -12,13 +12,10 @@ const app = express()
 
 app.use(express.json())
 
-app.use((req, res, next) => {
-  next()
-})
-
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
 app.use((err, req, res, next) => {
+  console.log(res.e.stack)
   logger.inform(res.myMethod)
   if (res.e) {
     err.status = 500

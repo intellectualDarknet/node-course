@@ -9,7 +9,6 @@ class UserController {
       res.status(400).json(error.message)
     } else {
       try {
-        res.myMethod = 'UserService createUser'
         const user = await UserService.create(req.body)
         res.status(200).json(user)
         next(res)
@@ -35,6 +34,7 @@ class UserController {
   async getUsers (req, res, next) {
     res.myMethod = 'UserService getUsers'
     try {
+      throw new Error('error')
       const users = await UserService.getUsers()
       res.status(200).json(users)
       next(res)
