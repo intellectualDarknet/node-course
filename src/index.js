@@ -22,6 +22,10 @@ process.on('uncaughtException', err => {
 })
 
 app.use(express.json())
+// app.use((req, res, next) => {
+//   console.log(b)
+//   next()
+// })
 
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)

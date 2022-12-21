@@ -4,6 +4,7 @@ class AppError extends Error {
     this.status = `${statusCode}`[0] === '4' ? 'fail' : 'error'
     this.statusCode = statusCode
     this.isOperational = true
+    this.isAppError = true
 
     Error.captureStackTrace(this, this.constructor)
   }

@@ -2,7 +2,8 @@ const logger = require('../logger/logger.js')
 
 module.exports = (err, req, res, next) => {
   res.myMethod && logger.inform(res.myMethod)
-  if (err) res.e = err
+  console.log('errorName', err.name, err)
+  if (err.name) { res.e = err }
   if (res.e) {
     res.e.statusCode = res.e.statusCode || 500
     res.e.status = res.e.status || 'error'
