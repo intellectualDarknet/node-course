@@ -6,6 +6,7 @@ const path = require('path')
 
 const UsersRouter = require('./routes/user.routes.js')
 const GroupRouter = require('./routes/group.router.js')
+const AuthRouter = require('./routes/auth.router.js')
 const { User } = require('./sequelize/models')
 const logger = require('./logger/logger')
 
@@ -26,7 +27,7 @@ app.use(express.json())
 //   console.log(b)
 //   next()
 // })
-
+app.use('/postres/user/', AuthRouter)
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
 
@@ -56,3 +57,28 @@ process.on('unhandledRejection', err => {
     process.exit(1)
   })
 })
+
+// import express from 'express'
+// import mongoose from 'mongoose'
+// import router from './router.js'
+
+// const port = 5000
+// const DB_URL = 'mongodb+srv://ladyblaumeux24:4057321qwe@cluster0.od2acyz.mongodb.net/?retryWrites=true&w=majority'
+
+// const app = express()
+
+// app.use(express.json())
+// app.use('/api', router)
+
+// async function startApp () {
+//   try {
+//     await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
+//     app.listen(port, () => {
+//       console.log('server start!' + port)
+//     })
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
+
+// startApp()
