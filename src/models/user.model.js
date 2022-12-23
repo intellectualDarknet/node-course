@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const validator = require('mongoose')
+const validator = require('validator')
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -9,6 +9,16 @@ const userSchema = new mongoose.Schema({
   passwordConfirm: { type: String, required: true }
 })
 
-const AuthUser = mongoose.model('AuthUser', userSchema)
+module.exports = mongoose.model('AuthUser', userSchema)
 
-module.exports = AuthUser
+// import mongoose from 'mongoose'
+
+// const User = new mongoose.Schema({
+//   id: { type: String, required: true },
+//   login: { type: String, required: true },
+//   password: { type: String, required: true },
+//   age: { type: Number, required: true },
+//   isDeleted: { type: Boolean, required: true }
+// })
+
+// export default mongoose.model('User', User)
