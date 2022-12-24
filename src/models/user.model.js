@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Passwords are not the same!'
     }
-  }
+  },
+  passwordChangedAt: { type: Date }
 })
 
 // middleware on safe takes smth and executes then right before the saving to db
@@ -39,6 +40,14 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword)
+}
+userSchema.methods.isPasswordChanged = function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10)
+    console.log(changedTimeStamp, JWTTimeStamp)
+
+    return JWTTimeStamp < changedTimeStamp
+  }
 }
 
 module.exports = mongoose.model('AuthUser', userSchema)

@@ -64,11 +64,12 @@ class AuthController {
 
   deleteUser = tryCatchFn(async (req, res, next) => {
     res.myMethod = 'UserService deleteUser'
-
-    const user = await AuthUser.findByPk(req.params.id)
-    await user.destroy()
+    const user = await AuthUser.findByIdAndDelete(req.params.id)
     if (!user) {
       res.status(404)
+    }
+    if (user === null) {
+      res.warning = 'there was nothing to delete'
     }
     res.status(200).json(user)
     next(res)
@@ -89,9 +90,17 @@ class AuthController {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
     console.log('decoded', decoded)
 
+    // check for token
+
     const freshUser = await AuthUser.findById(decoded.id)
     if (!freshUser) {
       res.e = new AppError('this token belongs to user that does not exist anymore', 401)
+      next(res.e)
+    }
+
+    // check if the user changed password after the token was issued
+    if (freshUser.isPasswordChanged(decoded.iat)) {
+      res.e = new AppError('User recently changed password, Please log in again', 401)
       next(res.e)
     }
 

@@ -11,9 +11,10 @@ function errorTransformer (value) {
 
 module.exports = (err, req, res, next) => {
   res.myMethod && logger.inform(res.myMethod)
+  res.warning && logger.warning(res.warning)
   if (err.name) { res.e = errorTransformer(err) }
 
-  if (res.e.name) {
+  if (res?.e?.name) {
     console.log('resultname', res.e.name)
     res.e = errorTransformer(res.e)
   }
