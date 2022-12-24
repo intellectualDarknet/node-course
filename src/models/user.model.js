@@ -1,13 +1,45 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true, validate: validator.isEmail },
   photo: String,
-  password: { type: String, required: true, minlength: 8 },
-  passwordConfirm: { type: String, required: true }
+  // select false и пароль никогда не будет показан
+  password: { type: String, required: true, minlength: 8, select: false },
+  passwordConfirm: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (el) {
+        // el == this.confirmPassword
+        // validation returns true then it ok when false then the validation is not passed
+        // and only works for create user
+        return el === this.password
+      },
+      message: 'Passwords are not the same!'
+    }
+  }
 })
+
+// middleware on safe takes smth and executes then right before the saving to db
+// next to call next middleware
+userSchema.pre('save', async function (next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified('password')) return next()
+
+  this.password = await bcrypt.hash(this.password, 12)
+
+  // we dont need confirm password to be in your db no sense in this!
+  this.passwordConfirm = undefined
+
+  next()
+})
+
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+  return await bcrypt.compare(candidatePassword, userPassword)
+}
 
 module.exports = mongoose.model('AuthUser', userSchema)
 

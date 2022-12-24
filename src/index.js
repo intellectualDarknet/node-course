@@ -1,4 +1,5 @@
 const express = require('express')
+require('dotenv').config()
 const mongoose = require('mongoose')
 const UsersRouter = require('./routes/user.routes.js')
 const GroupRouter = require('./routes/group.router.js')
@@ -12,6 +13,7 @@ const DB_URL = 'mongodb+srv://ladyblaumeux24:4057321qwe@cluster0.od2acyz.mongodb
 const app = express()
 
 app.use(express.json())
+
 app.use('/postgres/user/', AuthRouter)
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
