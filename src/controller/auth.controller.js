@@ -75,6 +75,15 @@ class AuthController {
     next(res)
   })
 
+  updateUser = tryCatchFn(async (req, res, next) => {
+    res.myMethod = 'UserService deleteUser'
+    console.log(req.params.id)
+    console.log(req.body)
+    const updateUser = await AuthUser.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    res.status(200).json(updateUser)
+    next(res)
+  })
+
   protect = tryCatchFn(async (req, res, next) => {
     let token
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
