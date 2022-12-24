@@ -77,9 +77,9 @@ class AuthController {
 
   updateUser = tryCatchFn(async (req, res, next) => {
     res.myMethod = 'UserService deleteUser'
-    console.log(req.params.id)
-    console.log(req.body)
-    const updateUser = await AuthUser.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const { id, body } = req.body
+    console.log(body)
+    const updateUser = await AuthUser.findByIdAndUpdate(id, body, { new: true })
     res.status(200).json(updateUser)
     next(res)
   })
