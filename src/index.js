@@ -1,19 +1,27 @@
 const express = require('express')
 require('dotenv').config()
+// require('dotenv').config({ path: '../.env' })
+const Tour = require('../src/models/tour.model')
 const mongoose = require('mongoose')
 const UsersRouter = require('./routes/user.routes.js')
 const GroupRouter = require('./routes/group.router.js')
 const AuthRouter = require('./routes/auth.router.js')
+const TourRouter = require('./routes/tour.router.js')
 const wrongPathHandler = require('./controller/path.controller.js')
 const generalHandler = require('./controller/general.controller.js')
 
 const port = 5000
-const DB_URL = 'mongodb+srv://ladyblaumeux24:4057321qwe@cluster0.od2acyz.mongodb.net/?retryWrites=true&w=majority'
+// const DB_URL = 'mongodb+srv://ladyblaumeux24:4057321qwe@cluster0.od2acyz.mongodb.net/?retryWrites=true&w=majority'
+
+// const DB_URL = process.env.DATABASE_URL.replace('<PASSWORD>', process.env.DATABASE_PASSWORD)
+
+const DB_URL = process.env.DATABASE_URL1
 
 const app = express()
 
 app.use(express.json())
 
+app.use('/postgres/tour', TourRouter)
 app.use('/postgres/user/', AuthRouter)
 app.use('/postgres/groups/', GroupRouter)
 app.use('/postgres/users/', UsersRouter)
@@ -23,9 +31,19 @@ app.use(generalHandler)
 
 async function startApp () {
   try {
+    // await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
     await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
-    app.listen(port, () => {
+    console.log('we are connected')
+
+    app.listen(port, async () => {
       console.log('server start!' + port)
+      const tour = new Tour({
+        name: 'global anime tour',
+        rating: 25,
+        price: 100
+      })
+      const value = await tour.save()
+      console.log(value)
     })
   } catch (e) {
     console.log(e)
