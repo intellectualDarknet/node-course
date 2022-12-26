@@ -76,10 +76,10 @@ class AuthController {
   })
 
   updateUser = tryCatchFn(async (req, res, next) => {
-    res.myMethod = 'UserService deleteUser'
-    const { id, body } = req.body
-    console.log(body)
-    const updateUser = await AuthUser.findByIdAndUpdate(id, body, { new: true })
+    res.myMethod = 'UserService updateUser'
+    const { id, ...rest } = req.body
+    console.log(rest)
+    const updateUser = await AuthUser.findByIdAndUpdate(id, rest, { new: true })
     res.status(200).json(updateUser)
     next(res)
   })
@@ -95,26 +95,51 @@ class AuthController {
       next(res.e)
     }
 
-    // checking the timing and checking the same secret
+    // chpasecking the timing and checking the same secret
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
-    console.log('decoded', decoded)
 
     // check for token
 
-    const freshUser = await AuthUser.findById(decoded.id)
-    if (!freshUser) {
+    const currentUser = await AuthUser.findById(decoded.id)
+    if (!currentUser) {
       res.e = new AppError('this token belongs to user that does not exist anymore', 401)
       next(res.e)
     }
 
     // check if the user changed password after the token was issued
-    if (freshUser.isPasswordChanged(decoded.iat)) {
+    if (currentUser.isPasswordChanged(decoded.iat)) {
       res.e = new AppError('User recently changed password, Please log in again', 401)
       next(res.e)
     }
-
+    req.user = currentUser
     next()
   })
+
+  restrictTo = (...rest) => {
+    return (req, res, next) => {
+      if (!rest.includes(req.user.role)) {
+        res.e = new AppError('You have no permission to do that!', 403)
+        next(res.e)
+      }
+      next()
+    }
+  }
+
+  forgotPassword = async (req, res, next) => {
+    console.log('forgot method')
+    res.myMethod = 'AuthController forgotPassword'
+    const user = await AuthUser.findOne({ email: req.body.email })
+
+    if (!user) {
+      res.e = new AppError('There is no such user!', 404)
+      next(res.e)
+    }
+
+    user.createPasswordResetToken()
+    await user.save()
+    res.status(200).json(user)
+    next(res)
+  }
 }
 
 module.exports = new AuthController()

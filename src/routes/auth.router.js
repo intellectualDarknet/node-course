@@ -7,8 +7,6 @@ AuthRouter.post('', AuthController.login)
 AuthRouter.get('', AuthController.getAllUsers)
 AuthRouter.delete('/:id', AuthController.deleteUser)
 AuthRouter.put('', AuthController.updateUser)
-// AuthRouter.put('/:id', AuthController.updateGroup)
-// AuthRouter.delete('/:id', AuthController.deleteGroup)
-// AuthRouter.put('/:id/add-users', AuthController.addUserToGroup)
+AuthRouter.post('/forget', AuthController.forgotPassword)
 
 module.exports = AuthRouter

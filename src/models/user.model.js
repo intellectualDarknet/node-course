@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -21,7 +22,12 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same!'
     }
   },
-  passwordChangedAt: { type: Date }
+  role: {
+    type: String, enum: ['user', 'guide', 'admin', 'lead-guide'], default: 'user'
+  },
+  passwordChangedAt: { type: Date },
+  passwordResetToken: { type: String },
+  passwordResetExpires: { type: Date }
 })
 
 // middleware on safe takes smth and executes then right before the saving to db
@@ -44,10 +50,20 @@ userSchema.methods.correctPassword = async function (candidatePassword, userPass
 userSchema.methods.isPasswordChanged = function (JWTTimeStamp) {
   if (this.passwordChangedAt) {
     const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10)
-    console.log(changedTimeStamp, JWTTimeStamp)
 
     return JWTTimeStamp < changedTimeStamp
   }
+}
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex')
+
+  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+
+  console.log(resetToken, this.passwordResetToken)
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+
+  return resetToken
 }
 
 module.exports = mongoose.model('AuthUser', userSchema)
