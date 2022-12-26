@@ -1,7 +1,6 @@
 const express = require('express')
 require('dotenv').config()
 // require('dotenv').config({ path: '../.env' })
-const Tour = require('../src/models/tour.model')
 const mongoose = require('mongoose')
 const UsersRouter = require('./routes/user.routes.js')
 const GroupRouter = require('./routes/group.router.js')
@@ -37,13 +36,6 @@ async function startApp () {
 
     app.listen(port, async () => {
       console.log('server start!' + port)
-      const tour = new Tour({
-        name: 'global anime tour',
-        rating: 25,
-        price: 100
-      })
-      const value = await tour.save()
-      console.log(value)
     })
   } catch (e) {
     console.log(e)

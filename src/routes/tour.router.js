@@ -1,6 +1,5 @@
 const Router = require('express')
 const TourController = require('../controller/tour.controller.js')
-
 const TourRouter = new Router()
 
 TourRouter.post('', TourController.createUser)
