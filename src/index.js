@@ -1,7 +1,7 @@
 const express = require('express')
 require('dotenv').config()
 // require('dotenv').config({ path: '../.env' })
-const mongoose = require('mongoose')
+// const insertConnect = require('./scripts/insert_connect.js')
 const UsersRouter = require('./routes/user.routes.js')
 const GroupRouter = require('./routes/group.router.js')
 const AuthRouter = require('./routes/auth.router.js')
@@ -13,8 +13,6 @@ const port = 5000
 // const DB_URL = 'mongodb+srv://ladyblaumeux24:4057321qwe@cluster0.od2acyz.mongodb.net/?retryWrites=true&w=majority'
 
 // const DB_URL = process.env.DATABASE_URL.replace('<PASSWORD>', process.env.DATABASE_PASSWORD)
-
-const DB_URL = process.env.DATABASE_URL1
 
 const app = express()
 
@@ -30,10 +28,7 @@ app.use(generalHandler)
 
 async function startApp () {
   try {
-    // await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
-    await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
-    console.log('we are connected')
-
+    // insertConnect()
     app.listen(port, async () => {
       console.log('server start!' + port)
     })
